@@ -6,8 +6,7 @@ import { useState, useEffect } from 'react'
 function App() {
   const [movies, setMovies] = useState([])
   const APIKEY = import.meta.env.VITE_MB_KEY
-  console.log(import.meta.env.VITE_MB_KEY)
-
+  
   const sendSearch = (search) => {
       fetch(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&language=en-US&query=${search}&page=1&include_adult=false`)
         .then(res => res.json())
