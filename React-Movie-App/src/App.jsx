@@ -5,23 +5,25 @@ import { useState, useEffect } from 'react'
 
 function App() {
   const [movies, setMovies] = useState([])
-  const APIKEY = import.meta.env.MOVIE_DB
+  const APIKEY = import.meta.env.VITE_MB_KEY
+  console.log(import.meta.env.VITE_MB_KEY)
 
   const sendSearch = (search) => {
-      fetch(`
-      https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&language=en-US&query=${search}&page=1&include_adult=false`)
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&language=en-US&query=${search}&page=1&include_adult=false`)
         .then(res => res.json())
-        .then(results => {
-          const { data } = results
-          setMovies(data)
+        .then(data => {
+          //const { data } = results
+          console.log(data)
+        setMovies(data.results)
         }).catch(err => console.log(err))
     }
     useEffect(() => {
-      fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${APIKEY}`)
+      fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${APIKEY}`)
         .then(res => res.json())
-        .then(results => {
-          const { data } = results
-          setGifs(data)
+        .then(data => {
+          //const { data } = results
+          console.log(data)
+          setMovies(data.results)
         }).catch(err => console.log(err))
     }, [])
 
@@ -31,11 +33,9 @@ function App() {
       <SearchBar className='search-input' handleSearch={sendSearch}/>
       <div className='grid-cards'>
           {
-            movies.map(movie => (
+            movies.map((movie) => (
               <MovieCards
-                title={movie.title}
-                url={movie.poster_path}
-                key={movie.id}
+                key={movie.id} {...movie}
               />
             ))
           }
