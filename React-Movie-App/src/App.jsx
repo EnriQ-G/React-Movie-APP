@@ -5,21 +5,30 @@ import { useState, useEffect } from 'react'
 
 function App() {
   const [movies, setMovies] = useState([])
-  const API_KEY = import.meta.env.MOVIE_DB
+  const APIKEY = import.meta.env.MOVIE_DB
 
   const sendSearch = (search) => {
-      fetch(`https://api.themoviedb.org/3/movie/550?api_key=${API_KEY}&query=${search}`)
+      fetch(`
+      https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&language=en-US&query=${search}&page=1&include_adult=false`)
         .then(res => res.json())
         .then(results => {
           const { data } = results
           setMovies(data)
         }).catch(err => console.log(err))
     }
+    useEffect(() => {
+      fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${APIKEY}`)
+        .then(res => res.json())
+        .then(results => {
+          const { data } = results
+          setGifs(data)
+        }).catch(err => console.log(err))
+    }, [])
 
   return (
     <>
       <h1>React Movie App</h1>
-      <SearchBar className='search-input' onChange={sendSearch}/>
+      <SearchBar className='search-input' handleSearch={sendSearch}/>
       <div className='grid-cards'>
           {
             movies.map(movie => (
